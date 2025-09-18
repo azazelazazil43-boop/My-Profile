@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Form Profil - Layout Horisontal</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#0b1220;
+      --accent:#7c3aed;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.04);
+      --paper-width-mm:210mm; /* default A4 */
+      --paper-height-mm:297mm;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background: linear-gradient(180deg,#071020 0%, #081229 50%, #081725 100%); color:#e6eef8}
+
+    /* Container - horizontal wide layout */
+    .app{
+      display:flex;
+      gap:28px;
+      padding:28px;
+      min-height:100vh;
+      align-items:flex-start;
+      justify-content:center;
+    }
+
+    /* Left: form area (narrower) */
+    .panel{
+      width:420px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      padding:18px;
+      border-radius:14px;
+      backdrop-filter:blur(6px);
+      box-shadow: 0 6px 24px rgba(2,6,23,0.6);
+    }
+    h2{margin:0 0 12px 0;font-size:18px}
+    label{display:block;font-size:13px;color:var(--muted);margin-top:12px}
+    input[type=text], input[type=number], textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
+    textarea{min-height:92px;resize:vertical}
+    .row{display:flex;gap:10px}
+    .small{flex:1}
+    .btn{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:10px;border:0;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#4f46e5);color:white}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04)}
+
+    /* Right: preview area (wider) */
+    .preview-wrap{flex:1;display:flex;flex-direction:column;gap:12px}
+    .preview{
+      flex:0 0 auto;
+      width:100%;
+      max-width:1100px;
+      border-radius:14px;
+      padding:22px;
+      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.04);
+      box-shadow:0 8px 40px rgba(2,6,23,0.6);
+    }
+
+    /* The printable 'paper' inside preview */
+    .paper{
+      display:flex;gap:18px;
+      background:linear-gradient(180deg,#fff 0,#fbfdff 100%);
+      color:#0b1220;border-radius:12px;padding:22px;
+      width:100%;
+      align-items:stretch;
+      box-shadow: inset 0 1px 0 rgba(0,0,0,0.02);
+    }
+
+    /* left column inside paper */
+    .paper-left{width:320px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;align-items:center}
+    .avatar{width:260px;height:260px;border-radius:12px;background:linear-gradient(180deg,#eef2ff,#f8fafc);display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .info{width:100%;padding:10px;border-radius:10px;background:rgba(10,14,22,0.02)}
+    .info h3{margin:6px 0 0 0}
+    .meta{font-size:13px;color:#475569;margin-top:8px}
+
+    /* right column inside paper */
+    .paper-right{flex:1;display:flex;flex-direction:column;gap:10px}
+    .section{padding:12px;border-radius:8px;background:linear-gradient(180deg,#ffffff,#fbfdff);box-shadow:0 1px 0 rgba(2,6,23,0.03)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{background:rgba(0,0,0,0.06);padding:6px 8px;border-radius:999px;font-size:12px}
+
+    /* small footer inside paper */
+    .paper-footer{display:flex;justify-content:space-between;font-size:12px;color:#475569;margin-top:10px}
+
+    /* controls row */
+    .controls{display:flex;gap:10px;align-items:center}
+    .controls .select{min-width:160px}
+
+    /* responsive */
+    @media(max-width:980px){
+      .app{flex-direction:column;padding:18px}
+      .panel{width:100%}
+      .preview-wrap{width:100%}
+    }
+
+    /* Print-specific: adjust the paper size via CSS variables */
+    @media print{
+      body{background:white}
+      .app{padding:0}
+      .panel, .controls{display:none}
+      .preview{box-shadow:none;border:0;padding:0}
+      .paper{box-shadow:none;border-radius:0;padding:0;margin:0}
+      @page{size: var(--paper-width-mm) var(--paper-height-mm); margin:10mm }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <h2>Profil — Input Data</h2>
+      <p style="font-size:13px;color:var(--muted)">Isi data di bawah. Preview akan muncul di kanan secara langsung.</p>
+
+      <label>Nama</label>
+      <input id="inp-name" type="text" placeholder="Nama lengkap" value="Nama Kamu">
+
+      <div class="row">
+        <div class="small">
+          <label>Umur</label>
+          <input id="inp-age" type="number" placeholder="20" value="20">
+        </div>
+        <div class="small">
+          <label>Asal Sekolah / Instansi</label>
+          <input id="inp-school" type="text" placeholder="SMA / Universitas" value="SMA Contoh">
+        </div>
+      </div>
+
+      <label>Deskripsi Kehidupan / Bio</label>
+      <textarea id="inp-bio">Tulis deskripsi singkat tentang diri kamu, passion, dan tujuan hidup.</textarea>
+
+      <label>Hobi (pisahkan dengan koma)</label>
+      <input id="inp-hobbies" type="text" placeholder="Membaca, Musik, Olahraga" value="Membaca, Musik">
+
+      <label>Link (Website / LinkedIn / GitHub)</label>
+      <input id="inp-links" type="text" placeholder="https://..." value="https://example.com">
+
+      <label>Upload Foto</label>
+      <input id="inp-photo" type="file" accept="image/*">
+
+      <label>Pilih Tema</label>
+      <select id="inp-theme">
+        <option value="modern">Modern Violet</option>
+        <option value="classic">Classic Paper</option>
+        <option value="dark">Dark Slate</option>
+      </select>
+
+      <label>Pilih Kertas untuk Print</label>
+      <div class="row">
+        <select id="inp-paper" class="select">
+          <option value="A4">A4 — 210 × 297 mm</option>
+          <option value="Letter">Letter — 216 × 279 mm</option>
+          <option value="Legal">Legal — 216 × 356 mm</option>
+          <option value="Custom">Custom (mm)</option>
+        </select>
+        <input id="custom-w" type="number" placeholder="lebar mm" style="width:110px;" disabled>
+        <input id="custom-h" type="number" placeholder="tinggi mm" style="width:110px;" disabled>
+      </div>
+
+      <div style="margin-top:12px;display:flex;gap:8px">
+        <button id="btn-print" class="btn btn-primary">Print / Simpan PDF</button>
+        <button id="btn-download-json" class="btn btn-ghost">Download JSON</button>
+      </div>
+
+      <p style="font-size:12px;color:var(--muted);margin-top:12px">Tip: Gunakan fitur Print -> Save as PDF di browser. Untuk kertas custom isi dimensi (mm) lalu pilih Custom.</p>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="controls">
+        <div style="flex:1;color:var(--muted)">Preview Layout — Lebar Horizontal</div>
+        <div class="controls">
+          <label style="font-size:13px;color:var(--muted);margin-right:6px">Skala:</label>
+          <select id="preview-scale">
+            <option value="0.8">80%</option>
+            <option value="0.9">90%</option>
+            <option value="1" selected>100%</option>
+            <option value="1.1">110%</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="preview" id="previewContainer" style="transform-origin:top left">
+        <!-- Paper preview where content is injected -->
+        <div id="paper" class="paper" style="--paper-width-mm:var(--paper-width-mm);--paper-height-mm:var(--paper-height-mm)">
+          <div class="paper-left">
+            <div class="avatar" id="avatar">
+              <svg width="120" height="120" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#eef2ff"/><path d="M12 12a4 4 0 100-8 4 4 0 000 8z" fill="#c7d2fe"/><path d="M3 20a9 9 0 0118 0v1H3v-1z" fill="#c7d2fe"/></svg>
+            </div>
+            <div class="info">
+              <h3 id="pv-name">Nama Kamu</h3>
+              <div class="meta" id="pv-meta">20 • SMA Contoh</div>
+            </div>
+
+            <div class="info" style="width:100%">
+              <div style="font-size:13px;color:#475569">Hobi</div>
+              <div class="tags" id="pv-tags"><span class="tag">Membaca</span><span class="tag">Musik</span></div>
+            </div>
+          </div>
+
+          <div class="paper-right">
+            <div class="section">
+              <div style="display:flex;justify-content:space-between;align-items:center">
+                <div style="font-weight:700;font-size:16px;color:#0b1220" id="pv-title">Profil Singkat</div>
+                <div style="font-size:12px;color:#475569" id="pv-links">https://example.com</div>
+              </div>
+              <div style="margin-top:8px;color:#334155" id="pv-bio">Tulis deskripsi singkat tentang diri kamu, passion, dan tujuan hidup.</div>
+            </div>
+
+            <div class="section">
+              <div style="font-weight:700;margin-bottom:6px">Pengalaman / Catatan</div>
+              <div style="color:#334155">Tambahkan pengalaman, prestasi singkat, atau catatan lain yang relevan untuk profil ini. Contoh: Juara OSN, Relawan, Magang di ...</div>
+            </div>
+
+            <div class="paper-footer">
+              <div id="pv-footer-left">Dibuat dengan ProfilBuilder</div>
+              <div id="pv-footer-right">Tanggal: <span id="pv-date">-</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  // Helper: set paper dimensions for print using CSS variables
+  function setPaperSize(widthMM, heightMM){
+    document.documentElement.style.setProperty('--paper-width-mm', widthMM + 'mm');
+    document.documentElement.style.setProperty('--paper-height-mm', heightMM + 'mm');
+  }
+
+  // Default to A4
+  const paperSizes = {
+    'A4':[210,297],
+    'Letter':[216,279],
+    'Legal':[216,356]
+  };
+
+  // Elements
+  const inpName = document.getElementById('inp-name');
+  const inpAge = document.getElementById('inp-age');
+  const inpSchool = document.getElementById('inp-school');
+  const inpBio = document.getElementById('inp-bio');
+  const inpHobbies = document.getElementById('inp-hobbies');
+  const inpLinks = document.getElementById('inp-links');
+  const inpPhoto = document.getElementById('inp-photo');
+  const inpTheme = document.getElementById('inp-theme');
+  const inpPaper = document.getElementById('inp-paper');
+  const customW = document.getElementById('custom-w');
+  const customH = document.getElementById('custom-h');
+  const btnPrint = document.getElementById('btn-print');
+  const btnDownloadJson = document.getElementById('btn-download-json');
+  const pvName = document.getElementById('pv-name');
+  const pvMeta = document.getElementById('pv-meta');
+  const pvBio = document.getElementById('pv-bio');
+  const pvTags = document.getElementById('pv-tags');
+  const pvLinks = document.getElementById('pv-links');
+  const pvDate = document.getElementById('pv-date');
+  const avatar = document.getElementById('avatar');
+  const previewContainer = document.getElementById('previewContainer');
+  const previewScale = document.getElementById('preview-scale');
+
+  // Update functions
+  function updatePreview(){
+    pvName.textContent = inpName.value || 'Nama Kamu';
+    pvMeta.textContent = (inpAge.value? inpAge.value + ' • ' : '') + (inpSchool.value || 'Asal Sekolah');
+    pvBio.textContent = inpBio.value || 'Deskripsi singkat tentang diri kamu.';
+    pvLinks.textContent = inpLinks.value || '';
+
+    // hobbies to tags
+    pvTags.innerHTML = '';
+    const hobbies = (inpHobbies.value || '').split(',').map(s=>s.trim()).filter(Boolean);
+    if(hobbies.length===0) pvTags.innerHTML = '<span class="tag">-</span>';
+    else hobbies.forEach(h=>{
+      const sp = document.createElement('span'); sp.className='tag'; sp.textContent = h; pvTags.appendChild(sp);
+    });
+
+    // date
+    const d = new Date(); pvDate.textContent = d.toLocaleDateString();
+
+    // theme
+    applyTheme(inpTheme.value);
+  }
+
+  function applyTheme(theme){
+    const p = document.getElementById('paper');
+    if(theme==='modern'){
+      p.style.background = 'linear-gradient(180deg,#ffffff,#fbfdff)';
+      p.style.color = '#0b1220';
+    } else if(theme==='classic'){
+      p.style.background = 'linear-gradient(180deg,#fffaf0,#fff9f0)';
+      p.style.color = '#222';
+    } else if(theme==='dark'){
+      p.style.background = 'linear-gradient(180deg,#0b1220,#071028)';
+      p.style.color = '#e6eef8';
+      p.querySelectorAll('.tag').forEach(t=>t.style.background='rgba(255,255,255,0.06)');
+    }
+  }
+
+  // photo upload
+  inpPhoto.addEventListener('change', e=>{
+    const file = e.target.files && e.target.files[0];
+    if(!file) return;
+    const img = document.createElement('img');
+    img.alt = 'Avatar';
+    const reader = new FileReader();
+    reader.onload = function(ev){ img.src = ev.target.result; avatar.innerHTML=''; avatar.appendChild(img); }
+    reader.readAsDataURL(file);
+  });
+
+  // form inputs update
+  [inpName, inpAge, inpSchool, inpBio, inpHobbies, inpLinks, inpTheme].forEach(el=>el.addEventListener('input', updatePreview));
+  updatePreview();
+
+  // paper selection
+  inpPaper.addEventListener('change', ()=>{
+    const v = inpPaper.value;
+    if(v==='Custom'){
+      customW.disabled=false; customH.disabled=false;
+      if(customW.value && customH.value) setPaperSize(customW.value, customH.value);
+    } else {
+      customW.disabled=true; customH.disabled=true; customW.value=''; customH.value='';
+      const sz = paperSizes[v]; setPaperSize(sz[0], sz[1]);
+    }
+  });
+  customW.addEventListener('input', ()=>{ if(customW.value && customH.value) setPaperSize(customW.value, customH.value); });
+  customH.addEventListener('input', ()=>{ if(customW.value && customH.value) setPaperSize(customW.value, customH.value); });
+
+  // print
+  btnPrint.addEventListener('click', ()=>{
+    // small UX: scale preview to selected size so print matches approximate layout
+    window.print();
+  });
+
+  // download json
+  btnDownloadJson.addEventListener('click', ()=>{
+    const data = {
+      name: inpName.value, age: inpAge.value, school: inpSchool.value,
+      bio: inpBio.value, hobbies: inpHobbies.value, links: inpLinks.value,
+      theme: inpTheme.value, paper: inpPaper.value
+    };
+    const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='profil.json'; a.click();
+  });
+
+  // preview scale
+  previewScale.addEventListener('change', ()=>{
+    const s = Number(previewScale.value);
+    previewContainer.style.transform = `scale(${s})`;
+  });
+
+  // keyboard quicksave: Ctrl+S to print
+  window.addEventListener('keydown', e=>{
+    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='s'){
+      e.preventDefault(); window.print();
+    }
+  });
+</script>
+</body>
+</html>
