@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Form Profil - Layout Horisontal</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#0b1220;
+      --accent:#06b6d4;
+      --muted:#94a3b8;
+      --glass: rgba(255,255,255,0.04);
+      --paper-width-mm:210mm;
+      --paper-height-mm:297mm;
+    }
+    *{box-sizing:border-box}
+    body{font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; margin:0; background: linear-gradient(90deg,#0f172a,#1e293b); color:#e6eef8}
+    .app{display:flex;gap:28px;padding:28px;min-height:100vh;align-items:flex-start;justify-content:center}
+    .panel{width:420px;background:var(--card);padding:18px;border-radius:14px;box-shadow:0 6px 24px rgba(0,0,0,0.6)}
+    h2{margin:0 0 12px 0;font-size:18px}
+    label{display:block;font-size:13px;color:var(--muted);margin-top:12px}
+    input[type=text], input[type=number], textarea, select{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:var(--glass);color:inherit}
+    textarea{min-height:92px;resize:vertical}
+    .row{display:flex;gap:10px}
+    .small{flex:1}
+    .btn{display:inline-flex;gap:8px;align-items:center;padding:10px 12px;border-radius:10px;border:0;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),#0891b2);color:white}
+    .btn-ghost{background:transparent;border:1px solid rgba(255,255,255,0.04);color:white}
+    .preview-wrap{flex:1;display:flex;flex-direction:column;gap:12px}
+    .preview{flex:0 0 auto;width:100%;max-width:1100px;border-radius:14px;padding:22px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.04);box-shadow:0 8px 40px rgba(0,0,0,0.6)}
+    .paper{display:flex;gap:18px;background:#fff;color:#0b1220;border-radius:12px;padding:22px;width:100%;align-items:stretch}
+    .paper-left{width:280px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;align-items:center}
+    .avatar{width:220px;height:220px;border-radius:12px;background:#f1f5f9;display:flex;align-items:center;justify-content:center;overflow:hidden}
+    .avatar img{width:100%;height:100%;object-fit:cover}
+    .info{width:100%;padding:10px;border-radius:10px;background:#f8fafc}
+    .info h3{margin:6px 0 0 0}
+    .meta{font-size:13px;color:#475569;margin-top:8px}
+    .paper-right{flex:1;display:flex;flex-direction:column;gap:10px}
+    .section{padding:12px;border-radius:8px;background:#f9fafb;box-shadow:0 1px 0 rgba(0,0,0,0.03)}
+    .tags{display:flex;gap:8px;flex-wrap:wrap}
+    .tag{background:rgba(0,0,0,0.06);padding:6px 8px;border-radius:999px;font-size:12px}
+    .paper-footer{display:flex;justify-content:space-between;font-size:12px;color:#475569;margin-top:10px}
+    @media(max-width:980px){.app{flex-direction:column;padding:18px}.panel{width:100%}.preview-wrap{width:100%}}
+    @media print{body{background:white}.app{padding:0}.panel,.controls{display:none}.preview{box-shadow:none;border:0;padding:0}.paper{box-shadow:none;border-radius:0;padding:0;margin:0}@page{size: var(--paper-width-mm) var(--paper-height-mm); margin:10mm }}
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <h2>Profil — Input Data</h2>
+      <label>Nama</label>
+      <input id="inp-name" type="text" placeholder="Nama lengkap" value="Nama Kamu">
+      <div class="row">
+        <div class="small"><label>Umur</label><input id="inp-age" type="number" value="20"></div>
+        <div class="small"><label>Asal Sekolah</label><input id="inp-school" type="text" value="SMA Contoh"></div>
+      </div>
+      <label>Deskripsi Kehidupan</label>
+      <textarea id="inp-bio">Deskripsi singkat tentang dirimu.</textarea>
+      <label>Hobi (pisahkan koma)</label>
+      <input id="inp-hobbies" type="text" value="Membaca, Musik">
+      <label>Link (Website / Sosial Media)</label>
+      <input id="inp-links" type="text" value="https://example.com">
+      <label>Upload Foto</label>
+      <input id="inp-photo" type="file" accept="image/*">
+      <label>Pilih Kertas</label>
+      <select id="inp-paper">
+        <option value="A4">A4</option>
+        <option value="Letter">Letter</option>
+        <option value="Legal">Legal</option>
+      </select>
+      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap">
+        <button id="btn-print" class="btn btn-primary">Print / PDF</button>
+        <button id="btn-download-json" class="btn btn-ghost">Download JSON</button>
+        <button id="btn-download-img" class="btn btn-ghost">Download PNG/JPEG</button>
+      </div>
+    </div>
+
+    <div class="preview-wrap">
+      <div class="preview" id="previewContainer">
+        <div id="paper" class="paper">
+          <div class="paper-left">
+            <div class="avatar" id="avatar"><span>Foto</span></div>
+            <div class="info"><h3 id="pv-name">Nama Kamu</h3><div class="meta" id="pv-meta">20 • SMA Contoh</div></div>
+            <div class="info"><div style="font-size:13px;color:#475569">Hobi</div><div class="tags" id="pv-tags"><span class="tag">Membaca</span></div></div>
+          </div>
+          <div class="paper-right">
+            <div class="section"><div style="font-weight:700;font-size:16px;color:#0b1220" id="pv-title">Profil Singkat</div><div style="margin-top:8px;color:#334155" id="pv-bio">Deskripsi singkat tentang dirimu.</div><div id="pv-links" style="font-size:12px;color:#475569;margin-top:6px">https://example.com</div></div>
+            <div class="section"><div style="font-weight:700;margin-bottom:6px">Catatan</div><div style="color:#334155">Tambahkan catatan atau pengalaman.</div></div>
+            <div class="paper-footer"><div>Dibuat dengan ProfilBuilder</div><div id="pv-date">Tanggal</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    const inpName=document.getElementById('inp-name'), inpAge=document.getElementById('inp-age'), inpSchool=document.getElementById('inp-school'), inpBio=document.getElementById('inp-bio'), inpHobbies=document.getElementById('inp-hobbies'), inpLinks=document.getElementById('inp-links'), inpPhoto=document.getElementById('inp-photo'), inpPaper=document.getElementById('inp-paper');
+    const pvName=document.getElementById('pv-name'), pvMeta=document.getElementById('pv-meta'), pvBio=document.getElementById('pv-bio'), pvTags=document.getElementById('pv-tags'), pvLinks=document.getElementById('pv-links'), pvDate=document.getElementById('pv-date'), avatar=document.getElementById('avatar');
+
+    function updatePreview(){
+      pvName.textContent=inpName.value||'Nama Kamu';
+      pvMeta.textContent=(inpAge.value?inpAge.value+' • ':'')+(inpSchool.value||'Asal Sekolah');
+      pvBio.textContent=inpBio.value||'';
+      pvLinks.textContent=inpLinks.value||'';
+      pvTags.innerHTML='';
+      (inpHobbies.value||'').split(',').map(s=>s.trim()).filter(Boolean).forEach(h=>{let sp=document.createElement('span');sp.className='tag';sp.textContent=h;pvTags.appendChild(sp)});
+      pvDate.textContent=new Date().toLocaleDateString();
+    }
+    [inpName,inpAge,inpSchool,inpBio,inpHobbies,inpLinks].forEach(el=>el.addEventListener('input',updatePreview)); updatePreview();
+
+    inpPhoto.addEventListener('change',e=>{const f=e.target.files[0];if(!f)return;const img=document.createElement('img');const r=new FileReader();r.onload=ev=>{img.src=ev.target.result;avatar.innerHTML='';avatar.appendChild(img)};r.readAsDataURL(f)});
+
+    document.getElementById('btn-print').addEventListener('click',()=>window.print());
+
+    document.getElementById('btn-download-json').addEventListener('click',()=>{
+      const data={name:inpName.value,age:inpAge.value,school:inpSchool.value,bio:inpBio.value,hobbies:inpHobbies.value,links:inpLinks.value};
+      const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='profil.json';a.click();
+    });
+
+    document.getElementById('btn-download-img').addEventListener('click',()=>{
+      html2canvas(document.getElementById('paper')).then(canvas=>{
+        const link=document.createElement('a');
+        link.download='profil.png';
+        link.href=canvas.toDataURL('image/png');
+        link.click();
+      });
+    });
+  </script>
+</body>
+</html>
